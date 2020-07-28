@@ -1,0 +1,14 @@
+.configTable table {
+    width: 100%;
+    border: 1px;
+    align-content: center;
+}
+
+th, td {
+    width: 20%;
+    background-color: blue;
+}
+
+.par {
+    opacity: 70%;
+}
