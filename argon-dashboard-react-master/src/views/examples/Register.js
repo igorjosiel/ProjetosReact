@@ -16,6 +16,9 @@
 
 */
 import React, { useState, useEffect } from "react";
+import ModalRegister from '../../components/Modal/ModalRegister';
+import imgError from '../../assets/img/imgModal/error.png';
+import imgSuccess from '../../assets/img/imgModal/success.jpeg';
 
 // reactstrap components
 import {
@@ -34,10 +37,118 @@ import {
 } from "reactstrap";
 
 const Register = () => {
-  const [ controller, setController ] = useState(false);
+  const [ isModalVisible, setIsModalVisible ] = useState(false);
   const [ nameUser, setNameUser ] = useState('');
   const [ emailUser, setEmailUser ] = useState('');
   const [ passwordUser, setPasswordUser ] = useState('');
+  const [ dados, setDados ] = useState({});
+  const [ estilo, setEstilo ] = useState({});
+
+  function validationInfo() {
+    setEstilo({
+      color: "red"
+    });
+
+    if(nameUser === "" && emailUser === "" && passwordUser === "")
+    {
+      setDados({
+        title: "Erro",
+        message: "Não é possível se cadastrar. Preencha todos os campos necessários!",
+        textButton: "Ok",
+        img: imgError,
+      });
+
+      setIsModalVisible(true);
+    }
+
+    if(nameUser === "" && emailUser !== "" && passwordUser !== "")
+    {
+      setDados({
+        title: "Erro",
+        message: "Não é possível se cadastrar. Por favor preencha o nome!",
+        textButton: "Ok",
+        img: imgError
+      });
+
+      setIsModalVisible(true);
+    }
+
+    if(nameUser !== "" && emailUser === "" && passwordUser !== "")
+    {
+      setDados({
+        title: "Erro",
+        message: "Não é possível se cadastrar. Por favor preencha o email!",
+        textButton: "Ok",
+        img: imgError
+      });
+
+      setIsModalVisible(true);
+    }
+
+    if(nameUser !== "" && emailUser !== "" && passwordUser === "")
+    {
+      setDados({
+        title: "Erro",
+        message: "Não é possível se cadastrar. Por favor digite uma senha!",
+        textButton: "Ok",
+        img: imgError
+      });
+
+      setIsModalVisible(true);
+    }
+
+    if(nameUser === "" && emailUser === "" && passwordUser !== "")
+    {
+      setDados({
+        title: "Erro",
+        message: "Não é possível se cadastrar. Por favor preencha o nome e email!",
+        textButton: "Ok",
+        img: imgError
+      });
+
+      setIsModalVisible(true);
+    }
+
+    if(nameUser === "" && emailUser !== "" && passwordUser === "")
+    {
+      setDados({
+        title: "Erro",
+        message: "Não é possível se cadastrar. Por favor preencha o nome e digite uma senha!",
+        textButton: "Ok",
+        img: imgError
+      });
+
+      setIsModalVisible(true);
+    }
+
+    if(nameUser !== "" && emailUser === "" && passwordUser === "")
+    {
+      setDados({
+        title: "Erro",
+        message: "Não é possível se cadastrar. Por favor preencha o email e digite uma senha!",
+        textButton: "Ok",
+        img: imgError
+      });
+
+      setIsModalVisible(true);
+    }
+
+    if(nameUser !== "" && emailUser !== "" && passwordUser !== "")
+    {
+      setDados({
+        title: "Sucesso",
+        message: "Usuário cadastrado com sucesso!",
+        textButton: "Ok",
+        img: imgSuccess
+      });
+
+      setEstilo({
+        color: "green"
+      });
+
+      setIsModalVisible(true);
+    }
+  }
 
   return (
     <>
@@ -90,7 +201,7 @@ const Register = () => {
                       <i className="ni ni-hat-3" />
                     </InputGroupText>
                   </InputGroupAddon>
-                  <Input placeholder="Digite seu nome..." type="text" onChange={(e) => { setNameUser(e.target.value); console.log(nameUser) } }/>
+                  <Input placeholder="Digite seu nome..." type="text" onChange={(e) => { setNameUser(e.target.value); }}/>
                 </InputGroup>
               </FormGroup>
               <FormGroup>
@@ -100,7 +211,7 @@ const Register = () => {
                       <i className="ni ni-email-83" />
                     </InputGroupText>
                   </InputGroupAddon>
-                  <Input placeholder="Digite seu Email..." type="email" autoComplete="new-email" onChange={(e) => { setEmailUser(e.target.value); console.log(emailUser) }}></Input>
+                  <Input placeholder="Digite seu Email..." type="email" autoComplete="new-email" onChange={(e) => { setEmailUser(e.target.value); }}></Input>
                 </InputGroup>
               </FormGroup>
               <FormGroup>
@@ -110,7 +221,7 @@ const Register = () => {
                       <i className="ni ni-lock-circle-open" />
                     </InputGroupText>
                   </InputGroupAddon>
-                  <Input placeholder="Digite uma senha..." type="password" autoComplete="new-password" onChange={(e) => { setPasswordUser(e.target.value); console.log(passwordUser) }}/>
+                  <Input placeholder="Digite uma senha..." type="password" autoComplete="new-password" onChange={(e) => { setPasswordUser(e.target.value); }}/>
                 </InputGroup>
               </FormGroup>
               <div className="text-muted font-italic">
@@ -142,9 +253,13 @@ const Register = () => {
                 </Col>
               </Row>
               <div className="text-center">
-                <Button className="mt-4" color="primary" type="button">
-                  Create account
+                <Button
+                  className="mt-4"
+                  color="primary"
+                  type="button"
+                  onClick={() => validationInfo()}>Create account
                 </Button>
+                {isModalVisible ? <ModalRegister onClose={() => setIsModalVisible(false)} dados={dados} estilo={estilo}></ModalRegister> : null}
               </div>
             </Form>
           </CardBody>
